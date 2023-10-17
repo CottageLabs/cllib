@@ -4,4 +4,5 @@ cllab -- Cottage Labs library
 This is a library of functions that reusable across projects.
 
 * no business logic from other project should be included here
-* if writing some wrapper or extension functions for other thrid party libraries (e.g. requests, bs4), no need to add the dependency on `setup.py`, just mark the supporting version on module file as document.
+* if writing some wrapper or extension functions for other third party libraries (e.g. requests, bs4), add the dependency related library version in `steup.py`'s `extras_require` instead of `install_requires` 
+* `install_requires` should be always empty
