@@ -3,7 +3,6 @@
 import math
 from datetime import datetime, timedelta
 from random import randint
-from typing import Tuple
 
 # Extracted from settings.py to prevent circular import
 config = {

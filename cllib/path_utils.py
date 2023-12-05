@@ -1,7 +1,7 @@
 import os
 import tempfile
 from pathlib import Path
-from typing import Union, TypeVar
+from typing import TypeVar
 
 PathStr = TypeVar("PathStr", str, Path)  # type of str or Path
 
@@ -31,19 +31,6 @@ def list_subdirs(path):
     return [x for x in os.listdir(path) if os.path.isdir(os.path.join(path, x))]
 
 
-def create_tmp_dir(is_auto_mkdir=False, num_retry=20) -> Path:
-    for _ in range(num_retry):
-        path = Path(tempfile.NamedTemporaryFile().name)
-        if not path.exists():
-            break
-    else:
-        raise EnvironmentError(f'create tmp dir retry [{num_retry}] failed')
-
-    if is_auto_mkdir:
-        path.mkdir(parents=True, exist_ok=True)
-    return path
-
-
 def abs_dir_path(src: PathStr) -> str:
     """ Return absolute dir path of src
 
@@ -54,3 +41,21 @@ def abs_dir_path(src: PathStr) -> str:
     '/opt'
     """
     return os.path.dirname(os.path.realpath(src))
+
+
+def create_tmp_path(*args, **kwargs):
+    for _ in range(1000):
+        file = tempfile.NamedTemporaryFile(*args, **kwargs)
+        file.close()  # close to remove file
+        if os.path.exists(file.name):
+            continue
+        else:
+            return file.name
+    raise FileExistsError('can\' create tmp file, file already exist')
+
+
+def create_tmp_dir(*args, is_auto_mkdir=False, num_retry=20, **kwargs) -> Path:
+    path = Path(create_tmp_path(*args, **kwargs))
+    if is_auto_mkdir:
+        path.mkdir(parents=True, exist_ok=True)
+    return path
