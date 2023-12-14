@@ -1,7 +1,7 @@
 # ~~ Dates:Library~~
 
 import math
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from random import randint
 
 # Extracted from settings.py to prevent circular import
@@ -184,3 +184,9 @@ def is_before(mydate, comparison=None):
     if isinstance(comparison, str):
         comparison = parse(comparison)
     return mydate < comparison
+
+
+def date_to_datetime(date_obj: date):
+    if isinstance(date_obj, date):
+        return datetime.combine(date_obj, datetime.min.time())
+    return date_obj
