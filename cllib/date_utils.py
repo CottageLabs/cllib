@@ -1,7 +1,7 @@
 # ~~ Dates:Library~~
 
 import math
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from random import randint
 
 # Extracted from settings.py to prevent circular import
@@ -184,3 +184,17 @@ def is_before(mydate, comparison=None):
     if isinstance(comparison, str):
         comparison = parse(comparison)
     return mydate < comparison
+
+
+def date_to_datetime(date_obj: date):
+    if isinstance(date_obj, date):
+        return datetime.combine(date_obj, datetime.min.time())
+    return date_obj
+
+
+def find_min_max_date(date_list: list) -> tuple:
+    return min(date_list), max(date_list)
+
+
+def is_overlap(start1, end1, start2, end2):
+    return start1 < end2 and end1 > start2
